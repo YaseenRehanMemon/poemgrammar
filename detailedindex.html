@@ -1,558 +1,358 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Poetry Masterclass — Handwritten Chalkboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Rubik:wght@300;400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Yaseen Rehan Memon | Full Stack Developer</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --bg:#0b0f12;
-    --panel:#0f1416;
-    --accent:#ffd24a;
-    --soft:#9fb8c9;
-    --card:#121516;
-    --chalk:#e6f6ff;
-    --muted:#9aa7b0;
-    --green:#6fe59b;
-    --red:#ff7b7b;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family: "Patrick Hand", "Rubik", sans-serif;
-    background: linear-gradient(180deg,var(--bg),#061013);
-    color:var(--chalk);
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{
-    max-width:1060px;
-    margin:28px auto;
-    padding:24px;
-  }
-  .board{
-    background:linear-gradient(180deg,#071014 0%, #0e1719 100%);
-    border-radius:14px;
-    padding:26px;
-    box-shadow:0 10px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
-    border:1px solid rgba(255,255,255,0.03);
-  }
-  header{
-    display:flex;
-    gap:18px;
-    align-items:center;
-    margin-bottom:10px;
-  }
-  .logo{
-    width:78px;height:78px;border-radius:10px;
-    background:linear-gradient(45deg,#101620,#16303a);
-    border:2px dashed rgba(255,255,255,0.03);
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 6px 18px rgba(0,0,0,0.6);
-  }
-  .logo h1{margin:0;color:var(--accent);font-size:18px}
-  h1.title{font-family:"Patrick Hand";font-size:28px;margin:0;color:var(--accent)}
-  p.lead{color:var(--soft);margin:8px 0 18px}
-  /* flow grid */
-  .grid{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap:18px;
-    align-items:start;
-  }
-  @media(max-width:920px){ .grid{grid-template-columns:1fr} }
-  .card{
-    background:linear-gradient(180deg,#0b1315,#081011);
-    border-radius:12px;
-    padding:14px 16px;
-    border:1px solid rgba(255,255,255,0.03);
-    box-shadow:0 8px 24px rgba(0,0,0,0.6);
-  }
-  .section-title{
-    display:flex;align-items:center;gap:10px;margin-bottom:8px;
-  }
-  .chalk{
-    display:inline-block;padding:6px 10px;border-radius:8px;background:#0f2024;color:var(--accent);font-weight:600;
-    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.3);
-  }
-  .explain{
-    color:var(--soft);font-size:15px;margin:8px 0 12px;
-  }
-  ul.points{padding-left:14px;margin:8px 0 6px}
-  ul.points li{
-    margin-bottom:10px;
-    line-height:1.45;
-    font-size:15px;
-    color:var(--chalk);
-    position:relative;
-    padding-left:22px;
-  }
-  ul.points li:before{
-    content:"✦";
-    position:absolute;left:0;top:0;color:var(--accent);
-    font-size:14px;
-  }
-  .example{
-    display:block;margin-top:6px;color:var(--soft);font-style:italic;padding-left:2px;
-  }
-  .trick{
-    margin-top:8px;background:rgba(255,210,74,0.06);color:var(--accent);padding:8px;border-radius:8px;font-weight:600;
-  }
-  .sub {
-    margin-top:10px;padding:10px;border-radius:8px;background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.015));
-    border:1px solid rgba(255,255,255,0.02);
-    color:var(--soft);
-  }
+:root {
+  --accent: #00bfa6;
+  --bg-dark: #0e1117;
+  --bg-light: #f7f9fc;
+  --text-dark: #e4e6eb;
+  --text-light: #0d1117;
+  --card-dark: #161b22;
+  --card-light: #ffffff;
+}
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  background: var(--bg-dark);
+  color: var(--text-dark);
+  transition: all 0.4s ease;
+}
 
-  /* flow connectors - simple visual lines */
-  .connector{
-    background: linear-gradient(90deg, transparent, rgba(255,210,74,0.06), transparent);
-    height:4px;border-radius:4px;margin:10px 0;
-  }
+/* light theme */
+body.light {
+  background: var(--bg-light);
+  color: var(--text-light);
+}
 
-  /* MCQ area */
-  .quiz{
-    margin-top:20px;
-    background:linear-gradient(180deg,#071214,#071214);
-    padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);
-  }
-  .q-block{margin-bottom:16px;padding:10px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
-  .q-block p{margin:0 0 8px;color:var(--chalk)}
-  .options label{
-    display:block;background:#081617;padding:8px;border:1px solid rgba(255,255,255,0.02);border-radius:8px;margin-bottom:6px;cursor:pointer;
-    color:var(--soft);font-size:15px;
-  }
-  .options input{margin-right:8px;transform:translateY(1px)}
-  .btn{
-    display:inline-block;padding:10px 18px;border-radius:8px;background:var(--accent);color:#061011;font-weight:700;border:none;cursor:pointer;
-    margin-top:8px;
-  }
-  #result{margin-top:12px;padding:12px;border-radius:8px;background:#071416;color:var(--chalk);display:none}
-  .res-line{padding:8px;border-radius:6px;margin-bottom:8px}
-  .correct{background:linear-gradient(90deg, rgba(111,229,155,0.08), rgba(111,229,155,0.02));border-left:4px solid var(--green);color:var(--green)}
-  .wrong{background:linear-gradient(90deg, rgba(255,123,123,0.06), rgba(255,123,123,0.02));border-left:4px solid var(--red);color:var(--red)}
-  .explain-small{color:var(--soft);font-size:14px;margin-top:6px}
-  footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+/* Navbar */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 10%;
+  position: sticky;
+  top: 0;
+  background: var(--card-dark);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s;
+  z-index: 99;
+}
+body.light nav {
+  background: var(--card-light);
+}
+.logo {
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--accent);
+}
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+}
+nav ul li a {
+  text-decoration: none;
+  color: inherit;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+nav ul li a:hover {
+  color: var(--accent);
+}
+.toggle {
+  cursor: pointer;
+  font-size: 18px;
+  border: 1px solid var(--accent);
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: var(--accent);
+  transition: all 0.3s;
+}
+.toggle:hover {
+  background: var(--accent);
+  color: #fff;
+}
 
-  /* small help bubble */
-  .hint{background:#071818;padding:8px;border-radius:8px;color:var(--soft);font-size:14px;border:1px dashed rgba(255,255,255,0.02)}
+/* Hero */
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 80px 10%;
+  gap: 40px;
+}
+.hero img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  object-fit: cover;
+  box-shadow: 0 0 25px rgba(0, 191, 166, 0.3);
+}
+.hero h1 {
+  font-size: 2.2rem;
+  margin-bottom: 6px;
+}
+.hero h3 {
+  color: var(--accent);
+  margin-top: 0;
+}
+.hero p {
+  max-width: 500px;
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+.hero button {
+  margin-top: 18px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+.hero button:hover {
+  opacity: 0.85;
+}
+
+/* Sections */
+section {
+  padding: 80px 10%;
+}
+section h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 50px;
+  color: var(--accent);
+}
+
+/* About */
+.about p {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+/* Skills */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 18px;
+  max-width: 700px;
+  margin: 40px auto;
+  text-align: center;
+}
+.skill {
+  background: var(--card-dark);
+  border-radius: 10px;
+  padding: 16px;
+  font-weight: 600;
+  transition: transform 0.3s, background 0.3s;
+}
+body.light .skill {
+  background: var(--card-light);
+}
+.skill:hover {
+  transform: translateY(-4px);
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Projects */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.project {
+  background: var(--card-dark);
+  border-radius: 14px;
+  padding: 24px;
+  transition: all 0.4s ease;
+}
+body.light .project {
+  background: var(--card-light);
+}
+.project:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0, 191, 166, 0.25);
+}
+.project h3 {
+  color: var(--accent);
+  margin-top: 0;
+}
+.project p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.tech {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: var(--accent);
+}
+.project a {
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Contact */
+.contact {
+  text-align: center;
+}
+.contact p {
+  font-size: 1.1rem;
+}
+.contact a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+.socials {
+  margin-top: 12px;
+}
+.socials a {
+  color: inherit;
+  font-size: 1.5rem;
+  margin: 0 10px;
+  transition: color 0.3s;
+}
+.socials a:hover {
+  color: var(--accent);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px;
+  background: var(--card-dark);
+  color: var(--text-dark);
+  font-size: 0.9rem;
+}
+body.light footer {
+  background: var(--card-light);
+  color: var(--text-light);
+}
+
+/* Animations */
+.fade {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 1s forwards;
+}
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
 </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="board">
-      <header>
-        <div class="logo"><h1>TEACH</h1></div>
-        <div>
-          <h1 class="title">Poetry Masterclass — Handwritten Chalkboard</h1>
-          <p class="lead">Combined, easy, and connected explanations for <strong>Figures of Speech</strong>, <strong>Elements of Poetry</strong>, and <strong>Genres of Poetry</strong> — followed by 25 hard MCQs with clear explanations.</p>
-        </div>
-      </header>
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">YR</div>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="toggle" id="themeToggle">🌙</div>
+  </nav>
 
-      <!-- Flow sections -->
-      <div class="grid">
-        <div class="card">
-          <div class="section-title"><span class="chalk">A</span><h3 style="margin:0 0 0 6px">Words that create PICTURES & FEELINGS</h3></div>
-          <p class="explain">These tools help the poem make clear pictures and feelings in your mind. Think: sight, smell, touch, and hidden meanings.</p>
-
-          <ul class="points">
-            <li><b>Imagery</b> — <span class="sub">Easy: words that paint pictures in your head using the five senses.</span>
-              <span class="example">Example: "The salty wind stung my face." → you can feel & smell the sea.</span>
-            </li>
-
-            <li><b>Symbol (Symbolism)</b> — <span class="sub">Easy: one thing stands for something more. It’s a simple object with a deeper message.</span>
-              <span class="example">Example: "A white dove" → stands for peace.</span>
-            </li>
-
-            <li><b>Theme</b> — <span class="sub">Easy: the poem’s main idea — the message the poet wants you to keep.</span>
-              <span class="example">Poem about kindness → theme = kindness.</span>
-            </li>
-
-            <li><b>Tone</b> — <span class="sub">Easy: the poet’s feeling while writing (like the teacher’s voice).</span>
-              <span class="example">If lines use happy words → tone = cheerful.</span>
-            </li>
-
-            <li><b>Mood</b> — <span class="sub">Easy: how the poem makes <em>you</em> feel when you read it.</span>
-              <span class="example">A gentle poem may make the reader feel calm → mood = calm.</span>
-            </li>
-          </ul>
-
-          <div class="trick">Trick: <strong>Theme</strong> = WHAT it says; <strong>Tone</strong> = poet’s feeling; <strong>Mood</strong> = how you feel.</div>
-        </div>
-
-        <div class="card">
-          <div class="section-title"><span class="chalk">B</span><h3 style="margin:0 0 0 6px">The SOUND — music of the poem</h3></div>
-          <p class="explain">Poems often act like music. These parts give them beat, rhyme, and nice sounds.</p>
-
-          <ul class="points">
-            <li><b>Rhyme</b> — <span class="sub">Easy: when line endings sound the same. Makes the poem sing.</span>
-              <span class="example">"Night / Light / Bright" → rhyme is clear.</span>
-            </li>
-
-            <li><b>Rhythm</b> — <span class="sub">Easy: the beat or flow when you read the poem aloud.</span>
-              <span class="example">"Jack and Jill went up the hill" has a steady rhythm.</span>
-            </li>
-
-            <li><b>Alliteration</b> — <span class="sub">Easy: same first sound in several words. It makes lines catchy.</span>
-              <span class="example">"She sells sea shells" → 's' sound repeats.</span>
-            </li>
-
-            <li><b>Onomatopoeia</b> — <span class="sub">Easy: words that copy real sounds.</span>
-              <span class="example">"Buzz", "Crash", "Splash".</span>
-            </li>
-
-            <li><b>Meter</b> — <span class="sub">Easy: a repeating pattern of strong and weak beats in a line.</span>
-              <span class="example">Many old poems have steady meter so they sound like music.</span>
-            </li>
-          </ul>
-
-          <div class="trick">Trick: Rhyme + Rhythm = poem’s music. Alliteration & onomatopoeia are small sound tools.</div>
-        </div>
-
-        <div class="card">
-          <div class="section-title"><span class="chalk">C</span><h3 style="margin:0 0 0 6px">Language MAGIC — Figures of Speech</h3></div>
-          <p class="explain">These are quick tricks poets use to make lines strong and memorable. Short, bright, and powerful.</p>
-
-          <ul class="points">
-            <li><b>Simile</b> — <span class="sub">Easy: a comparison using "like" or "as".</span>
-              <span class="example">"Brave as a lion." → simile says 'as'.</span>
-            </li>
-
-            <li><b>Metaphor</b> — <span class="sub">Easy: direct comparison without "like/as".</span>
-              <span class="example">"He is a lion." → means brave, not really a lion.</span>
-            </li>
-
-            <li><b>Personification</b> — <span class="sub">Easy: giving human actions to things that aren’t human.</span>
-              <span class="example">"The moon smiled." → moon cannot smile, but it is described like a person.</span>
-            </li>
-
-            <li><b>Irony</b> — <span class="sub">Easy: when something happens that is the opposite of what we expect.</span>
-              <span class="example">"A fire station burns down." → surprising opposite event.</span>
-            </li>
-
-            <li><b>Oxymoron</b> — <span class="sub">Easy: two opposite words together to make a striking phrase.</span>
-              <span class="example">"Deafening silence" or "bittersweet".</span>
-            </li>
-          </ul>
-
-          <div class="trick">Trick: Simile & Metaphor = comparison team; Personification gives life to objects; Irony surprises us.</div>
-        </div>
-
-        <div class="card">
-          <div class="section-title"><span class="chalk">D</span><h3 style="margin:0 0 0 6px">Kinds (Genres) of Poetry — the poem’s style or purpose</h3></div>
-          <p class="explain">These explain WHAT poems do — tell a story, praise someone, be sad, or simply sing feelings.</p>
-
-          <ul class="points">
-            <li><b>Lyric</b> — <span class="sub">Easy: short poem of personal feeling, like a song lyric.</span>
-              <span class="example">A short love poem that says "I miss you" in lovely words.</span>
-            </li>
-
-            <li><b>Narrative</b> — <span class="sub">Easy: poem that tells a story with events and characters.</span>
-              <span class="example">A poem describing a journey or adventure.</span>
-            </li>
-
-            <li><b>Epic</b> — <span class="sub">Easy: very long poem about heroes and big events.</span>
-              <span class="example">Ancient poems about wars and heroes (long and grand).</span>
-            </li>
-
-            <li><b>Elegy</b> — <span class="sub">Easy: a sad poem written for someone who died.</span>
-              <span class="example">A poem written after a friend passes away.</span>
-            </li>
-
-            <li><b>Ode</b> — <span class="sub">Easy: a respectful poem that praises someone or something.</span>
-              <span class="example">A poem praising a tree, a hero, or a song.</span>
-            </li>
-
-            <li><b>Pastoral</b> — <span class="sub">Easy: poems about countryside, farms, and simple life in nature.</span>
-              <span class="example">Poems about fields, shepherds, and sunsets.</span>
-            </li>
-
-            <li><b>Ballad</b> — <span class="sub">Easy: story-poem often meant to be sung, with repeated lines.</span>
-              <span class="example">Folk songs that tell a story in simple words.</span>
-            </li>
-
-            <li><b>Free Verse</b> — <span class="sub">Easy: poems with no fixed rhyme or meter — speech-like and free.</span>
-              <span class="example">Modern poems that read like spoken words.</span>
-            </li>
-
-            <li><b>Limerick</b> — <span class="sub">Easy: a very short funny poem of five lines with a special beat (AABBA rhyme).</span>
-              <span class="example">Classic silly five-line poems.</span>
-            </li>
-          </ul>
-
-          <div class="trick">Memory phrase: <em>Lyric Narrates Epic Elegies, Odes, Pastoral Ballads, Free Verse, Limericks.</em></div>
-        </div>
-      </div>
-
-      <!-- connector -->
-      <div class="connector"></div>
-
-      <!-- extended examples + small stories -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px">
-        <div class="card">
-          <h3 style="color:var(--accent);margin:0 0 8px">Short Story: How these parts work together</h3>
-          <p class="explain">Imagine a short poem about a child on a beach:</p>
-          <ul class="points">
-            <li><b>Imagery:</b> "salt on lips, sand warm under feet" — you can smell and feel it.</li>
-            <li><b>Tone:</b> gentle and happy — the poet uses soft words.</li>
-            <li><b>Theme:</b> childhood joy — the main message.</li>
-            <li><b>Form:</b> lyric — short and musical.</li>
-            <li><b>Figure:</b> "the sea sang" — personification (sea can't sing but it's a nice image).</li>
-          </ul>
-          <div class="sub">When you write or read, ask: <strong>What</strong> does it say? <strong>How</strong> does it sound? <strong>How</strong> does it make me feel?</div>
-        </div>
-
-        <div class="card">
-          <h3 style="color:var(--accent);margin:0 0 8px">Mini Cheatsheet</h3>
-          <p class="explain">One-line reminders you can memorize fast:</p>
-          <ul class="points">
-            <li><b>Imagery</b> = senses → picture in the mind.</li>
-            <li><b>Symbol</b> = small object with big meaning.</li>
-            <li><b>Theme</b> = the lesson.</li>
-            <li><b>Tone</b> = poet’s voice.</li>
-            <li><b>Mood</b> = reader’s feeling.</li>
-            <li><b>Rhyme/Rhythm</b> = music.</li>
-            <li><b>Simile/Metaphor</b> = comparisons (simile uses like/as).</li>
-            <li><b>Personification</b> = life to things.</li>
-            <li><b>Genres</b> = purpose (lyric, elegy, ode, etc.).</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- QUIZ -->
-      <div class="quiz">
-        <h2 style="margin:0 0 12px;color:var(--accent);font-size:20px">🧠 Final Test — 25 Hard MCQs</h2>
-        <p class="explain">These are tricky: read carefully. After submit you'll get your score and clear explanations for each wrong answer.</p>
-
-        <form id="quizForm">
-          <!-- We'll generate questions with JS -->
-        </form>
-
-        <button class="btn" onclick="submitQuiz()">Submit Answers</button>
-        <div id="result"></div>
-      </div>
-
-      <footer>
-        Tip: Read the short examples again before starting the quiz — it helps your brain link ideas quickly.
-      </footer>
+  <!-- Hero -->
+  <section class="hero fade" id="home">
+    <div>
+      <img src="https://i.ibb.co/b5V1B7bX/passport.jpg" alt="Yaseen Rehan Memon" />
+      <h1>Yaseen Rehan Memon</h1>
+      <h3>Full Stack Developer</h3>
+      <p>I build smooth and modern web experiences using the MERN stack. I love turning creative ideas into clean, working code — from design to deployment.</p>
+      <a href="#projects"><button>View My Work</button></a>
     </div>
-  </div>
+  </section>
+
+  <!-- About -->
+  <section class="about fade" id="about">
+    <h2>About Me</h2>
+    <p>I'm a passionate Full Stack Web Developer from Pakistan who loves building both the frontend and backend of modern web applications. I specialize in the MERN stack and enjoy creating projects that look great, load fast, and work smoothly. I handle everything — from design and coding to deployment on Vercel and Git.</p>
+  </section>
+
+  <!-- Skills -->
+  <section class="fade" id="skills">
+    <h2>My Skills</h2>
+    <div class="skills-grid">
+      <div class="skill">HTML</div>
+      <div class="skill">CSS</div>
+      <div class="skill">JavaScript</div>
+      <div class="skill">React.js</div>
+      <div class="skill">Node.js</div>
+      <div class="skill">Express.js</div>
+      <div class="skill">MongoDB</div>
+      <div class="skill">Git</div>
+      <div class="skill">Vercel</div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="fade" id="projects">
+    <h2>Projects</h2>
+    <div class="projects-grid">
+      <div class="project">
+        <h3>ChatPatti Restaurant</h3>
+        <p>ChatPatti is a complete online restaurant website where users can sign in, browse the menu, and place orders with details like spice levels and special notes. Integrated with a secure payment system, all orders are received instantly by the restaurant owner.</p>
+        <p class="tech">Tech Used: MERN Stack</p>
+        <p><a href="https://chatpatti.vercel.app" target="_blank">🔗 Visit Site</a></p>
+      </div>
+
+      <div class="project">
+        <h3>ToolVerse</h3>
+        <p>ToolVerse is a browser-only web app offering over 68 tools for PDFs, images, videos, code, and more — all processed directly in the browser without data leaving the device. It’s a secure, fast, and multi-purpose toolkit for everyone.</p>
+        <p class="tech">Tech Used: React.js</p>
+        <p><a href="https://toolverse-liard.vercel.app/" target="_blank">🔗 Visit Site</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact fade" id="contact">
+    <h2>Contact</h2>
+    <p>📧 Email me at <a href="mailto:justvibe786@gmail.com">justvibe786@gmail.com</a></p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 Yaseen Rehan Memon — Built with ❤️ and MERN magic.
+  </footer>
 
 <script>
-/* ======= QUESTIONS: 25 HARD MCQs =======
-Each entry: q (question), o (options array), a (answer string), e (explanation simple words)
-*/
-const QUESTIONS = [
-{q:"1) Which choice best shows a <u>metaphor</u> rather than a simile?", 
- o:["She runs like the wind.","He was as brave as a lion.","That news was a dagger to my heart.","Her smile is like the sun."],
- a:"That news was a dagger to my heart.",
- e:"Metaphor says one thing is another (news = dagger). Simile uses 'like' or 'as' (the others use like/as)."
-},
-
-{q:"2) 'The leaves whispered secrets to the sidewalk.' This line mainly uses which figure of speech?", 
- o:["Alliteration","Personification","Onomatopoeia","Oxymoron"],
- a:"Personification",
- e:"Leaves and sidewalks cannot whisper. The line gives plants a human action — that's personification."
-},
-
-{q:"3) Which example is <strong>NOT</strong> primarily imagery?", 
- o:["The perfume of jasmine filled the room.","He stormed in and the door slammed.","Blue waves rolled under the moonlight.","She tasted the salt of tears."],
- a:"He stormed in and the door slammed.",
- e:"Imagery uses senses (smell/taste/sight). 'He stormed in...' describes action, not a sensory picture — it's action & sound but not mainly sensory image."
-},
-
-{q:"4) If a poem makes you feel peaceful, which two terms best describe 'poet's feeling' and 'your feeling'?", 
- o:["Tone = peaceful, Mood = poet's feeling","Tone = poet's feeling, Mood = reader's feeling","Theme = poet's feeling, Tone = reader's feeling","Mood = main idea, Tone = rhyme"],
- a:"Tone = poet's feeling, Mood = reader's feeling",
- e:"Tone is how the poet writes (their feeling). Mood is how the poem makes the reader feel."
-},
-
-{q:"5) Which of these is an example of onomatopoeia used to create sound imagery?", 
- o:["The sun smiled.","The engine hummed and purred.","Time is a thief.","He was a mountain of strength."],
- a:"The engine hummed and purred.",
- e:"'Hummed' and 'purred' imitate real engine sounds — onomatopoeia."
-},
-
-{q:"6) Identify the best example of <strong>alliteration</strong>:", 
- o:["Silent night, holy night.","She sells sea shells by the sea shore.","The river ran cold and clear.","He is as brave as a lion."],
- a:"She sells sea shells by the sea shore.",
- e:"Alliteration repeats the first sound ('s' in She, sells, sea, shells)."
-},
-
-{q:"7) What is the MAIN difference between rhyme and rhythm?", 
- o:["Rhyme is repeating vowel sounds; Rhythm is image-making.","Rhyme is sound at line end; Rhythm is the poem's beat and pattern of stress.","Rhyme equals meter; Rhythm equals theme.","Rhyme = meaning; Rhythm = punctuation."],
- a:"Rhyme is sound at line end; Rhythm is the poem's beat and pattern of stress.",
- e:"Rhyme matches sounds at line endings. Rhythm is the flow/beat when you read lines aloud."
-},
-
-{q:"8) 'A fire station burned to ashes' is often used to teach which literary idea?", 
- o:["Imagery","Irony","Metaphor","Alliteration"],
- a:"Irony",
- e:"It is ironic because a place that stops fires—fire station—being burned is the opposite of expected."
-},
-
-{q:"9) Which choice best explains what symbolism does in a poem?", 
- o:["Replaces plain words with harder words.","Makes things rhyme.","Uses one small thing to stand for a big idea.","Tells a story in five lines."],
- a:"Uses one small thing to stand for a big idea.",
- e:"Symbolism uses objects (like a rose) to represent bigger ideas (like love)."
-},
-
-{q:"10) A stanza is most like which of these in prose (regular writing)?", 
- o:["A sentence","A paragraph","A chapter","A word"],
- a:"A paragraph",
- e:"A stanza groups lines like a paragraph groups sentences."
-},
-
-{q:"11) Which poem type is usually short, musical, and focuses on personal feeling?", 
- o:["Epic","Lyric","Ballad","Pastoral"],
- a:"Lyric",
- e:"Lyric poems are short and express personal emotions — like song lyrics."
-},
-
-{q:"12) Which line shows an oxymoron?", 
- o:["The loud quiet of the room.","The birds flew high in the sky.","She walked slowly.","The river runs fast."],
- a:"The loud quiet of the room.",
- e:"'Oxymoron' joins two opposite words: 'loud' and 'quiet' together for effect."
-},
-
-{q:"13) Which of the following is a key sign of free verse?", 
- o:["Strict rhyme scheme.","Four-line stanzas only.","No fixed meter or rhyme — sounds like natural speech.","Must be about nature."],
- a:"No fixed meter or rhyme — sounds like natural speech.",
- e:"Free verse doesn't follow set rhyme or meter; it reads like speaking."
-},
-
-{q:"14) Which feature most helps a ballad feel like a song?", 
- o:["Long lines and no rhyme.","Repeated lines and a simple rhyme scheme.","Very complex language.","No rhythm."],
- a:"Repeated lines and a simple rhyme scheme.",
- e:"Ballads use repeated lines (refrain) and simple rhymes to make them singable."
-},
-
-{q:"15) 'Her voice is music to my ears' is an example of which device?", 
- o:["Metaphor","Personification","Onomatopoeia","Alliteration"],
- a:"Metaphor",
- e:"It says voice = music directly. It's a metaphor because it equates voice to music."
-},
-
-{q:"16) What does 'meter' measure in poetry?", 
- o:["The number of rhyming words.","The pattern of stressed and unstressed syllables.","The poem's age.","The poem's theme."],
- a:"The pattern of stressed and unstressed syllables.",
- e:"Meter is the regular pattern of strong and weak beats (syllables) in a line."
-},
-
-{q:"17) An ode most often does which of the following?", 
- o:["Tells a heroic story.","Praises a person, object, or idea respectfully.","Makes readers laugh.","Describes a farm life casually."],
- a:"Praises a person, object, or idea respectfully.",
- e:"An ode is a poem written to praise something, often with respect and admiration."
-},
-
-{q:"18) A narrative poem differs from a lyric because it:", 
- o:["Is always sung.","Tells a sequence of events and has characters.","Is shorter.","Only uses free verse."],
- a:"Tells a sequence of events and has characters.",
- e:"Narrative poems tell stories with events and characters; lyrics focus on feelings."
-},
-
-{q:"19) 'Time is a thief' — this line is which figure of speech?", 
- o:["Simile","Metaphor","Oxymoron","Onomatopoeia"],
- a:"Metaphor",
- e:"It calls time a thief to show it steals moments — direct comparison without like/as."
-},
-
-{q:"20) Which of these best describes an elegy?", 
- o:["A short funny poem.","A mourning poem that expresses sorrow for someone who died.","A poem that praises a hero.","A poem only about nature."],
- a:"A mourning poem that expresses sorrow for someone who died.",
- e:"Elegy is a sad poem used to mourn and remember someone who died."
-},
-
-{q:"21) If a poet chooses very simple words or very fancy words, that choice is called:", 
- o:["Diction","Tone","Rhythm","Rhyme"],
- a:"Diction",
- e:"Diction = the poet’s choice of words; it can be simple, formal, or slangy and changes the poem's feel."
-},
-
-{q:"22) Which statement about 'symbol' vs 'imagery' is correct?", 
- o:["Imagery always uses symbols; symbols are only words.","Symbol stands for idea; imagery uses senses to make pictures.","They are the same thing.","Imagery means rhyme."],
- a:"Symbol stands for idea; imagery uses senses to make pictures.",
- e:"Symbol = object with deeper meaning. Imagery = sensory descriptions (sight, smell, touch)."
-},
-
-{q:"23) Which option best shows irony (not just surprising event)?", 
- o:["A quiet room suddenly full of noise.","A policeman robbed while on duty.","A long poem about a tree.","A person tripping on a rug."],
- a:"A policeman robbed while on duty.",
- e:"Irony involves opposite expectation. A police officer (who protects) being robbed is an ironic opposite event."
-},
-
-{q:"24) Which is the best short way to spot a simile?", 
- o:["Look for 'is' used as a verb.","Look for 'like' or 'as' comparing two things.","Look for rhyme at line ends.","Look for repeated consonants."],
- a:"Look for 'like' or 'as' comparing two things.",
- e:"Similes compare using 'like' or 'as' (e.g., 'as brave as a lion')."
-},
-
-{q:"25) 'The clock ticked and the silence crept' — this line uses what main devices?", 
- o:["Onomatopoeia and personification.","Oxymoron and simile.","Metaphor and rhyme.","Alliteration and elegy."],
- a:"Onomatopoeia and personification.",
- e:"'Ticked' copies the sound (onomatopoeia). 'Silence crept' gives silence a moving action (personification)."
-}
-];
-
-
-// Render quiz
-const form = document.getElementById('quizForm');
-QUESTIONS.forEach((item, idx)=>{
-  const block = document.createElement('div');
-  block.className = 'q-block';
-  const p = document.createElement('p');
-  p.innerHTML = `<strong>${item.q}</strong>`;
-  block.appendChild(p);
-
-  const opts = document.createElement('div');
-  opts.className = 'options';
-  item.o.forEach((opt,i)=>{
-    const id = `q${idx}_opt${i}`;
-    const label = document.createElement('label');
-    label.innerHTML = `<input type="radio" name="q${idx}" id="${id}" value="${opt}"> ${opt}`;
-    opts.appendChild(label);
-  });
-  block.appendChild(opts);
-  form.appendChild(block);
+// Dark/Light Toggle
+const toggle = document.getElementById('themeToggle');
+toggle.addEventListener('click', () => {
+  document.body.classList.toggle('light');
+  toggle.textContent = document.body.classList.contains('light') ? '🌞' : '🌙';
 });
-
-// Submit logic
-function submitQuiz(){
-  let score = 0;
-  const resDiv = document.getElementById('result');
-  resDiv.style.display = 'block';
-  resDiv.innerHTML = '<h3 style="margin-top:0;color:var(--accent)">Results & Explanations</h3>';
-  // per-question results
-  QUESTIONS.forEach((q, i) => {
-    const selected = document.querySelector(`input[name="q${i}"]:checked`);
-    const val = selected ? selected.value : null;
-    const line = document.createElement('div');
-    line.className = 'res-line ' + (val === q.a ? 'correct' : 'wrong');
-    if(val === q.a){
-      score++;
-      line.innerHTML = `<strong>Q${i+1} — Correct</strong><div class="explain-small">${q.e}</div>`;
-    } else {
-      line.innerHTML = `<strong>Q${i+1} — Wrong</strong>
-                        <div class="explain-small">Your answer: <em>${val || 'No answer'}</em><br>
-                        Correct: <strong>${q.a}</strong><br>
-                        Why: ${q.e}</div>`;
-    }
-    resDiv.appendChild(line);
-  });
-
-  const final = document.createElement('div');
-  final.style.marginTop = '12px';
-  final.style.padding = '12px';
-  final.style.borderRadius = '8px';
-  final.style.background = 'linear-gradient(90deg, rgba(255,210,74,0.06), rgba(255,210,74,0.02))';
-  final.innerHTML = `<strong style="color:var(--accent)">Your Score: ${score} / ${QUESTIONS.length}</strong>
-                     <div style="color:var(--muted);margin-top:6px">Tip: Review the explanation lines you got wrong — they show the exact reason in simple words.</div>`;
-  resDiv.appendChild(final);
-  // scroll to result
-  setTimeout(()=>window.scrollTo({top:resDiv.offsetTop-20, behavior:'smooth'}),120);
-}
-
 </script>
 </body>
 </html>
